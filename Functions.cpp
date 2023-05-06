@@ -4,6 +4,11 @@
 #include "Functions.h"
 #include "Functions.h"
 
+using namespace std;
+
+//Buttons
+vector< vector<LButton> > gButtons;
+
 ///Window Functions
 bool init()
 {
@@ -104,37 +109,13 @@ bool loadMedia()
             cout << "Failed to render text texture!\n";
             success = false;
         }
-
-        if(!gPlay.loadFromRenderedText("PLAY", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
-
-        if(!gExit.loadFromRenderedText("EXIT", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
-
-        textColor = { 255, 0, 0 };
-        if(!gPlayColor.loadFromRenderedText("PLAY", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
-
-        if(!gExitColor.loadFromRenderedText("EXIT", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
     }
 
-    //Load scene
-    if (!gBackgroundTexture.loadFromFile("Image/Background.png"))
+    //Load sound effects
+    click = Mix_LoadWAV("Sounds/click.wav");
+    if(click == NULL)
     {
-        cout << "Failed to load background texture!\n";
+        cout << "Failed to load click sound effect! SDL_mixer Error: " << Mix_GetError() << endl;
         success = false;
     }
 
@@ -149,50 +130,132 @@ bool loadMedia()
         //Set sprites
         for(int i = 0; i < BUTTON_SPRITE_TOTAL; i++)
         {
-            gSpriteClips[i].x = i * 32;
+            gSpriteClips[i].x = i * TILE_SIZE;
             gSpriteClips[i].y = 0;
             gSpriteClips[i].w = TILE_SIZE;
             gSpriteClips[i].h = TILE_SIZE;
         }
-        //Set buttons position
-        for (int i = 0; i < SIDE; i++)
-        {
-            for (int j = 0; j < SIDE; j++)
-            {
-                gButtons[i][j].setPosition(j * TILE_SIZE + DISTANCE_BETWEEN, i * TILE_SIZE + DISTANCE_BETWEEN);
-            }
-        }
     }
 
     //Load tables
-	if (!easyTable.loadFromFile("Image/easy.png"))
-	{
+    if (!easyTable.loadFromFile("Image/easy.png"))
+    {
         cout << "Failed to load easy board" << endl;
         success = false;
-	}
+    }
 
-    //Load sound effects
-    click = Mix_LoadWAV("Sounds/click.wav");
-    if(click == NULL)
+    if (!mediumTable.loadFromFile("Image/medium.png"))
     {
-        cout << "Failed to load click sound effect! SDL_mixer Error: " << Mix_GetError() << endl;
+        cout << "Failed to load medium board" << endl;
+        success = false;
+    }
+
+    if (!hardTable.loadFromFile("Image/hard.png"))
+    {
+        cout << "Failed to load hard board" << endl;
         success = false;
     }
 
     return success;
 }
 
-//bool loadMenuMedia()
-//{
-//    bool success = true;
-//
-//    //Menu background
-//
-//}
+bool loadMenuMedia()
+{
+    //Loading success flag
+    bool success = true;
+
+    //Open the font
+    gMenuFont = TTF_OpenFont("Font/DTM-Sans.ttf", 40);
+    if(gFont == NULL)
+    {
+        cout << "Failed to load DTM-Sans font! SDL_ttf Error: " << TTF_GetError() << endl;
+        success = false;
+    }
+    else
+    {
+        //Render text
+        SDL_Color textColor = { 140, 140, 140 };
+        if(!gPlay.loadFromRenderedText("PLAY", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
+
+        if(!gExit.loadFromRenderedText("EXIT", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
+
+        if(!gEasy.loadFromRenderedText("EASY", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
+
+        if(!gMedium.loadFromRenderedText("MEDIUM", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
+
+        if(!gHard.loadFromRenderedText("HARD", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
+
+        textColor = { 0, 0, 0 };
+        if(!gPlayColor.loadFromRenderedText("PLAY", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
+
+        if(!gExitColor.loadFromRenderedText("EXIT", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
+
+        if(!gEasyColor.loadFromRenderedText("EASY", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
+
+        if(!gMediumColor.loadFromRenderedText("MEDIUM", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
+
+        if(!gHardColor.loadFromRenderedText("HARD", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
+    }
+
+    //Load scene
+    if (!menuTheme.loadFromFile("Image/MenuBackground.png"))
+    {
+        cout << "Failed to load background texture!\n";
+        success = false;
+    }
+
+    if (!difficultyTheme.loadFromFile("Image/difficultyBackground.png"))
+    {
+        cout << "Failed to load background texture!\n";
+        success = false;
+    }
+
+    return success;
+}
 
 void close()
 {
-    //Free loaded images
+    //Free loaded textures
     gButtonSpriteSheetTexture.free();
     gMineLeftTexture.free();
     gBackgroundTexture.free();
@@ -201,7 +264,9 @@ void close()
 
     //Free global font
     TTF_CloseFont(gFont);
+    TTF_CloseFont(gMenuFont);
     gFont = NULL;
+    gMenuFont = NULL;
 
     //Free the sound effects
     Mix_FreeChunk(click);
@@ -219,14 +284,293 @@ void close()
     SDL_Quit();
 }
 
+///Menu rendering Functions
+void createMenu()
+{
+    SDL_RenderClear(gRenderer);
+
+    menuTheme.render(0, 0);
+    gPlay.render( ( SCREEN_WIDTH - gPlay.getWidth() ) / 2, 325 );
+    gExit.render( ( SCREEN_WIDTH - gExit.getWidth() ) / 2, 400 );
+
+    SDL_RenderPresent(gRenderer);
+
+    return;
+}
+
+bool renderMenu()
+{
+    //Returns Play(true) or Exit(false)
+    bool inPlay = false;
+    bool inExit = false;
+    bool quit = false;
+    SDL_Event e;
+
+    createMenu();
+    while(!quit)
+    {
+        while(SDL_PollEvent(&e) != 0)
+        {
+            if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE)
+            {
+                return false;
+            }
+
+            if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEMOTION)
+            {
+                int x, y;
+                SDL_GetMouseState(&x, &y);
+
+                if (x > ( SCREEN_WIDTH - gPlay.getWidth() ) / 2 && x < ( SCREEN_WIDTH - gPlay.getWidth() ) / 2 + gPlay.getWidth() && y > 325 && y < 325 + gPlay.getHeight())
+                {
+                    inPlay = true;
+                }
+                else inPlay = false;
+
+                if (x > ( SCREEN_WIDTH - gExit.getWidth() ) / 2 && x < ( SCREEN_WIDTH - gExit.getWidth() ) / 2 + gExit.getWidth() && y > 400 && y < 400 + gExit.getHeight())
+                {
+                    inExit = true;
+                }
+                else inExit = false;
+
+                if (e.type == SDL_MOUSEMOTION)
+                {
+                    if (inPlay == true)
+                    {
+                        gPlayColor.render( ( SCREEN_WIDTH - gPlay.getWidth() ) / 2, 325 );
+                    }
+                    else
+                        gPlay.render( ( SCREEN_WIDTH - gPlay.getWidth() ) / 2, 325 );
+
+                    if (inExit == true)
+                    {
+                        gExitColor.render( ( SCREEN_WIDTH - gExit.getWidth() ) / 2, 400 );
+                    }
+                    else
+                        gExit.render( ( SCREEN_WIDTH - gExit.getWidth() ) / 2, 400 );
+                }
+
+                if (e.type == SDL_MOUSEBUTTONDOWN)
+                {
+                    if (e.button.button == SDL_BUTTON_LEFT)
+                    {
+                        if (inPlay == true)
+                        {
+                            return true;
+                        }
+
+                        if (inExit == true)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            SDL_RenderPresent(gRenderer);
+        }
+    }
+}
+
+void createDifficulty()
+{
+    SDL_RenderClear(gRenderer);
+
+    difficultyTheme.render(0, 0);
+    gEasy.render(260, 200);
+    gMedium.render(240, 275);
+    gHard.render(260, 350);
+
+    SDL_RenderPresent(gRenderer);
+
+    return;
+}
+
+bool renderDifficulty()
+{
+    bool quit = false;
+    bool inEasy = false;
+    bool inMedium = false;
+    bool inHard = false;
+    SDL_Event e;
+
+    createDifficulty();
+    while(!quit)
+    {
+        while(SDL_PollEvent(&e) != 0)
+        {
+            if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE)
+            {
+                return false;
+            }
+
+            if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEMOTION)
+            {
+                int x, y;
+                SDL_GetMouseState(&x, &y);
+
+                if (x > 260 && x < 260 + gEasy.getWidth() && y > 200 && y < 200 + gEasy.getHeight())
+                {
+                    inEasy = true;
+                }
+                else inEasy = false;
+
+                if (x > 240 && x < 240 + gMedium.getWidth() && y > 275 && y < 275 + gMedium.getHeight())
+                {
+                    inMedium = true;
+                }
+                else inMedium = false;
+
+                if (x > 260 && x < 260 + gHard.getWidth() && y > 350 && y < 350 + gHard.getHeight())
+                {
+                    inHard = true;
+                }
+                else inHard = false;
+
+                if (e.type == SDL_MOUSEMOTION)
+                {
+                    if (inEasy == true)
+                    {
+                        gEasyColor.render(260, 200);
+                    }
+                    else
+                        gEasy.render(260, 200);
+
+                    if (inMedium == true)
+                    {
+                        gMediumColor.render(240, 275);
+                    }
+                    else
+                        gMedium.render(240, 275);
+
+                    if (inHard == true)
+                    {
+                        gHardColor.render(260, 350);
+                    }
+                    else
+                        gHard.render(260, 350);
+                }
+
+                if (e.type == SDL_MOUSEBUTTONDOWN)
+                {
+                    if (e.button.button == SDL_BUTTON_LEFT)
+                    {
+                        if (inEasy == true)
+                        {
+                            setDifficulty(EASY);
+                            quit = true;
+                        }
+
+                        if (inMedium == true)
+                        {
+                            setDifficulty(MEDIUM);
+                            quit = true;
+                        }
+
+                        if (inHard == true)
+                        {
+                            setDifficulty(HARD);
+                            quit = true;
+                        }
+                    }
+                }
+            }
+
+            SDL_RenderPresent(gRenderer);
+        }
+    }
+
+    return true;
+}
+
+///Game Functions
+void setDifficulty(int Level)
+{
+    DIFFICULTY = Level;
+
+    switch (DIFFICULTY)
+    {
+    case EASY:
+    {
+        SCREEN_WIDTH = 400;
+        SCREEN_HEIGHT = 400;
+        MINES = 9;
+        SIDE = 10;
+
+        break;
+    }
+
+    case MEDIUM:
+    {
+        SCREEN_WIDTH = 600;
+        SCREEN_HEIGHT = 600;
+        MINES = 40;
+        SIDE = 16;
+
+        break;
+    }
+
+    case HARD:
+    {
+        SCREEN_WIDTH = 800;
+        SCREEN_HEIGHT = 800;
+        MINES = 99;
+        SIDE = 24;
+
+        break;
+    }
+    }
+
+    DISTANCE_BETWEEN = (SCREEN_WIDTH - SIDE * TILE_SIZE) / 2;
+    countMineLeft = MINES;
+    countTileLeft = SIDE * SIDE;
+
+    realBoard.resize(SIDE, vector<int> (SIDE));
+    curBoard.resize(SIDE, vector<int> (SIDE));
+    gButtons.resize(SIDE, vector<LButton> (SIDE));
+
+
+    SDL_SetWindowSize(gWindow, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+    //Set buttons position
+    for (int i = 0; i < SIDE; i++)
+    {
+        for (int j = 0; j < SIDE; j++)
+        {
+            gButtons[i][j].setPosition(j * TILE_SIZE + DISTANCE_BETWEEN, i * TILE_SIZE + DISTANCE_BETWEEN + 30);
+        }
+    }
+
+    return;
+}
+
 void renderGame()
 {
     //Clear screen
-    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(gRenderer);
+    SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
     //Render background
-    gBackgroundTexture.render(0, 0);
+    switch (DIFFICULTY)
+    {
+    case EASY:
+    {
+        easyTable.render(0,0);
+        break;
+    }
+
+    case MEDIUM:
+    {
+        mediumTable.render(0,0);
+        break;
+    }
+
+    case HARD:
+    {
+        hardTable.render(0,0);
+        break;
+    }
+    }
 
     //Render buttons
     for(int i = 0; i < SIDE; i++)
@@ -248,93 +592,6 @@ void renderGame()
     return;
 }
 
-///Menu Functions
-void createMenu()
-{
-    menuTheme.render(0, 0);
-    gPlay.render(250, 400);
-    gExit.render(450, 400);
-    SDL_RenderPresent(gRenderer);
-    return;
-}
-
-bool showMenu()
-{
-    //Returns Play(false) or Exit(true)
-    bool inPlay = false;
-    bool inExit = false;
-    bool quit = false;
-    SDL_Event e;
-
-    createMenu();
-    while(!quit)
-    {
-        while(SDL_PollEvent(&e) != 0)
-        {
-            if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE)
-            {
-                return true;
-            }
-
-            if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEMOTION)
-            {
-                int x, y;
-				SDL_GetMouseState(&x, &y);
-
-                if (x > 300 && x < 300 + gPlay.getWidth() && y > 400 && y < 400 + gPlay.getHeight())
-                {
-                    inPlay = true;
-                }
-                else inPlay = false;
-
-                if (x > 450 && x < 450 + gExit.getWidth() && y > 400 && y < 400 + gExit.getWidth())
-                {
-                    inExit = true;
-                }
-                else inExit = false;
-
-                if (e.type == SDL_MOUSEMOTION)
-                {
-                    if (inPlay == true)
-                    {
-                        gPlayColor.render(250, 400);
-                    }
-                    else
-                        gPlay.render(250, 400);
-
-                    if (inExit == true)
-                    {
-                        gExitColor.render(450, 400);
-                    }
-                    else
-                        gExit.render(450, 400);
-                }
-
-                if (e.type == SDL_MOUSEBUTTONDOWN)
-                {
-                    if (e.button.button == SDL_BUTTON_LEFT)
-                    {
-                        if (inPlay == true)
-                        {
-                            return false;
-                        }
-
-                        if (inExit == true)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            SDL_RenderPresent(gRenderer);
-        }
-    }
-
-    return false;
-}
-
-///Game Functions
 bool gameHandle()
 {
     //Event handler
@@ -407,7 +664,7 @@ void flagManager()
     if (gameOver)
     {
         //Render lose text
-        gTextTextureL.render((SCREEN_WIDTH - gTextTextureL.getWidth()) / 2, 0);
+        gTextTextureL.render( ( SCREEN_WIDTH - gTextTextureL.getWidth() ) / 2, 0);
 
         for(int i = 0; i < SIDE; i++)
         {
@@ -452,7 +709,6 @@ void playAgainManager(bool &quitGame)
 void placeMines()
 {
     //Initialize boards
-    int mine = 0;
     for (int i = 0; i < SIDE; i++)
         for (int j = 0; j < SIDE; j++)
         {
@@ -516,4 +772,9 @@ void changeMine(int row, int col)
                 break;
             }
     return;
+}
+
+bool isValid(int row, int col)
+{
+    return (row >= 0 && col >= 0 && row < SIDE && col < SIDE);
 }

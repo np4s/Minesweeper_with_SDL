@@ -4,7 +4,7 @@
 #include "Constants.h"
 
 //Reveal hidden tiles
-void reveal(int i, int j);
+void reveal();
 
 //The mouse button
 class LButton
@@ -27,5 +27,3 @@ class LButton
 		SDL_Point mPosition;
 };
 
-//Button
-extern LButton gButtons[SIDE][SIDE];

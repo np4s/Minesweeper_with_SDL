@@ -1,10 +1,13 @@
 #pragma once
 
-#include <iostream>
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
-#include <cstring>
+#include<iostream>
+#include<time.h>
+#include<SDL.h>
+#include<SDL_image.h>
+#include<SDL_ttf.h>
+#include<SDL_mixer.h>
+#include<string>
+#include <vector>
 
 using namespace std;
 

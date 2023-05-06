@@ -1,5 +1,6 @@
 #include "Variables.h"
 #include "Buttons.h"
+#include "Texture.h"
 
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
@@ -7,11 +8,17 @@ SDL_Window* gWindow = NULL;
 //The window renderer
 SDL_Renderer* gRenderer = NULL;
 
+//Screen dimension
+int SCREEN_WIDTH = 600;
+int SCREEN_HEIGHT = 600;
+int DISTANCE_BETWEEN;
+
 //The sound effects that will be used
 Mix_Chunk *click = NULL;
 
 //Globally used font
 TTF_Font *gFont = NULL;
+TTF_Font *gMenuFont = NULL;
 
 //Mouse button texture
 SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
@@ -20,7 +27,7 @@ LTexture gButtonSpriteSheetTexture;
 //In game image
 LTexture gBackgroundTexture;
 LTexture menuTheme;
-LTexture levelTheme;
+LTexture difficultyTheme;
 LTexture easyTable;
 LTexture mediumTable;
 LTexture hardTable;
@@ -42,27 +49,25 @@ LTexture gMediumColor;
 LTexture gHardColor;
 
 ///Game variables
+//Table's size
+int SIDE;
+
+//Board data
+std::vector <std::vector<int> > curBoard;
+std::vector <std::vector<int> > realBoard;
+
 //Gameplay variables
-int countMineLeft = MINES;
-int countTileLeft = SIDE * SIDE;
+int MINES;
+int DIFFICULTY;
+int countMineLeft;
+int countTileLeft;
 bool gameOver = false;
 bool isWinning = false;
 
 //In memory text stream
 stringstream mineLeft;
 
-//Board with mine
-int realBoard[SIDE][SIDE];
-
-//Board for showing
-int curBoard[SIDE][SIDE];
-
 //Check first move
 bool firstMove = true;
 
-//Check if cell is within board
-bool isValid(int row, int col)
-{
-    return (row >= 0 && col >= 0 && row < SIDE && col < SIDE);
-}
 

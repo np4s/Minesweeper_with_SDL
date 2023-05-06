@@ -1,5 +1,20 @@
 #include <ctime>
 #include "Buttons.h"
+#include "Functions.h"
+
+using namespace std;
+
+LButton::LButton()
+{
+	mPosition.x = 0;
+	mPosition.y = 0;
+}
+
+void LButton::setPosition(int x, int y)
+{
+	mPosition.x = x;
+	mPosition.y = y;
+}
 
 void reveal(int row, int col)
 {
@@ -20,18 +35,6 @@ void reveal(int row, int col)
     }
 
     return;
-}
-
-LButton::LButton()
-{
-	mPosition.x = 0;
-	mPosition.y = 0;
-}
-
-void LButton::setPosition(int x, int y)
-{
-	mPosition.x = x;
-	mPosition.y = y;
 }
 
 void LButton::handleEvent(SDL_Event* e)
@@ -123,5 +126,3 @@ void LButton::render(int i, int j)
 	gButtonSpriteSheetTexture.render(mPosition.x, mPosition.y, &gSpriteClips[curBoard[i][j]]);
 }
 
-//Button
-LButton gButtons[SIDE][SIDE];

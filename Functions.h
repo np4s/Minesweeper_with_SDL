@@ -6,6 +6,8 @@ bool init();
 
 //Loads media
 bool loadMedia();
+bool loadMenuMedia();
+bool loadGameBoardMedia();
 
 //Frees media and shuts down SDL
 void close();
@@ -13,11 +15,16 @@ void close();
 //Render game window
 void renderGame();
 
-///Menu Functions
+///Menu rendering Functions
 void createMenu();
-bool showMenu();
+bool renderMenu();
+void createDifficulty();
+bool renderDifficulty();
 
 ///Game Functions
+//Set game variables
+void setDifficulty(int Level);
+
 //Handle game events on queue
 bool gameHandle();
 
@@ -38,3 +45,6 @@ void changeMine(int row, int col);
 
 //Create game board
 void placeMines();
+
+//Check if cell is within board
+bool isValid(int row, int col);

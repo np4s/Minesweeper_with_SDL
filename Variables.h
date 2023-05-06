@@ -13,11 +13,17 @@ extern SDL_Window* gWindow;
 //The window renderer
 extern SDL_Renderer* gRenderer;
 
+//Screen dimension
+extern int SCREEN_WIDTH;
+extern int SCREEN_HEIGHT;
+extern int DISTANCE_BETWEEN;
+
 //The sound effects that will be used
 extern Mix_Chunk *click;
 
 //Globally used font
 extern TTF_Font *gFont;
+extern TTF_Font *gMenuFont;
 
 //Mouse button texture
 extern SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
@@ -26,7 +32,7 @@ extern LTexture gButtonSpriteSheetTexture;
 //In game image
 extern LTexture gBackgroundTexture;
 extern LTexture menuTheme;
-extern LTexture levelTheme;
+extern LTexture difficultyTheme;
 extern LTexture easyTable;
 extern LTexture mediumTable;
 extern LTexture hardTable;
@@ -48,7 +54,16 @@ extern LTexture gMediumColor;
 extern LTexture gHardColor;
 
 ///Game variables
+//Table's size
+extern int SIDE;
+
+//Board data
+extern std::vector <std::vector<int> > curBoard;
+extern std::vector <std::vector<int> > realBoard;
+
 //Gameplay variables
+extern int MINES;
+extern int DIFFICULTY;
 extern int countMineLeft;
 extern int countTileLeft;
 extern bool gameOver;
@@ -57,18 +72,8 @@ extern bool isWinning;
 //In memory text stream
 extern stringstream mineLeft;
 
-//Board with mine
-extern int realBoard[SIDE][SIDE];
-
-//Board for showing
-extern int curBoard[SIDE][SIDE];
-
 //Check first move
 extern bool firstMove;
 
-///Some other functions
-
-//check if cell is within board
-bool isValid(int row, int col);
 
 

@@ -1,13 +1,14 @@
 # depslib dependency file v1.0
-1683226165 source:c:\users\admin\onedrive\desktop\msw-dupe\buttons.cpp
+1683346100 source:c:\users\admin\onedrive\desktop\msw-dupe\buttons.cpp
 	<ctime>
 	"Buttons.h"
+	"Functions.h"
 
-1683129656 c:\users\admin\onedrive\desktop\msw-dupe\buttons.h
+1683346386 c:\users\admin\onedrive\desktop\msw-dupe\buttons.h
 	"Variables.h"
 	"Constants.h"
 
-1683254768 c:\users\admin\onedrive\desktop\msw-dupe\variables.h
+1683370041 c:\users\admin\onedrive\desktop\msw-dupe\variables.h
 	<SDL_mixer.h>
 	<sstream>
 	"Texture.h"
@@ -128,12 +129,15 @@
 	"begin_code.h"
 	"close_code.h"
 
-1681444985 c:\users\admin\onedrive\desktop\msw-dupe\texture.h
+1683345216 c:\users\admin\onedrive\desktop\msw-dupe\texture.h
 	<iostream>
+	<time.h>
 	<SDL.h>
 	<SDL_image.h>
 	<SDL_ttf.h>
-	<cstring>
+	<SDL_mixer.h>
+	<string>
+	<vector>
 
 1672757820 c:\program files\c++_lib\sdl2-2.26.2\x86_64-w64-mingw32\include\sdl2\sdl.h
 	"SDL_main.h"
@@ -430,23 +434,18 @@
 	"begin_code.h"
 	"close_code.h"
 
-1683225804 c:\users\admin\onedrive\desktop\msw-dupe\constants.h
+1683368676 c:\users\admin\onedrive\desktop\msw-dupe\constants.h
 
-1683259500 source:c:\users\admin\onedrive\desktop\msw-dupe\functions.cpp
+1683370943 source:c:\users\admin\onedrive\desktop\msw-dupe\functions.cpp
 	"Texture.h"
 	"Constants.h"
 	"Variables.h"
 	"Functions.h"
 	"Functions.h"
 
-1683227947 c:\users\admin\onedrive\desktop\msw-dupe\functions.h
+1683352033 c:\users\admin\onedrive\desktop\msw-dupe\functions.h
 
-1683258886 source:c:\users\admin\onedrive\desktop\msw-dupe\main.cpp
-	<iostream>
-	<ctime>
-	<stdlib.h>
-	<sstream>
-	<string>
+1683369547 source:c:\users\admin\onedrive\desktop\msw-dupe\main.cpp
 	"Texture.h"
 	"Constants.h"
 	"Variables.h"
@@ -456,7 +455,8 @@
 	"Texture.h"
 	"Variables.h"
 
-1683254768 source:c:\users\admin\onedrive\desktop\msw-dupe\variables.cpp
+1683369956 source:c:\users\admin\onedrive\desktop\msw-dupe\variables.cpp
 	"Variables.h"
 	"Buttons.h"
+	"Texture.h"
 
