@@ -11,7 +11,9 @@ SDL_Renderer* gRenderer = NULL;
 //Screen dimension
 int SCREEN_WIDTH = 600;
 int SCREEN_HEIGHT = 600;
-int DISTANCE_BETWEEN;
+int DISTANCE_W;
+int DISTANCE_H;
+
 
 //The sound effects that will be used
 Mix_Chunk *click = NULL;
@@ -50,7 +52,8 @@ LTexture gHardColor;
 
 ///Game variables
 //Table's size
-int SIDE;
+int BOARD_WIDTH;
+int BOARD_HEIGHT;
 
 //Board data
 std::vector <std::vector<int> > curBoard;

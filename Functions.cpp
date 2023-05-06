@@ -82,7 +82,7 @@ bool loadMedia()
     bool success = true;
 
     //Open the font
-    gFont = TTF_OpenFont("Font/DTM-Sans.ttf", 40);
+    gFont = TTF_OpenFont("Font/DTM-Sans.ttf", 35);
     if(gFont == NULL)
     {
         cout << "Failed to load DTM-Sans font! SDL_ttf Error: " << TTF_GetError() << endl;
@@ -92,18 +92,6 @@ bool loadMedia()
     {
         //Render text
         SDL_Color textColor = { 140, 140, 140 };
-        if(!gTextTextureW.loadFromRenderedText("YOU WIN :D", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
-
-        if(!gTextTextureL.loadFromRenderedText("YOU LOSE :(", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
-
         if(!gPlayAgainTexture.loadFromRenderedText("Press R to play again!", textColor))
         {
             cout << "Failed to render text texture!\n";
@@ -164,77 +152,67 @@ bool loadMenuMedia()
     //Loading success flag
     bool success = true;
 
-    //Open the font
-    gMenuFont = TTF_OpenFont("Font/DTM-Sans.ttf", 40);
-    if(gFont == NULL)
+    //Render text
+    SDL_Color textColor = { 140, 140, 140 };
+    if(!gPlay.loadFromRenderedText("PLAY", textColor))
     {
-        cout << "Failed to load DTM-Sans font! SDL_ttf Error: " << TTF_GetError() << endl;
+        cout << "Failed to render text texture!\n";
         success = false;
     }
-    else
+
+    if(!gExit.loadFromRenderedText("EXIT", textColor))
     {
-        //Render text
-        SDL_Color textColor = { 140, 140, 140 };
-        if(!gPlay.loadFromRenderedText("PLAY", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
+        cout << "Failed to render text texture!\n";
+        success = false;
+    }
 
-        if(!gExit.loadFromRenderedText("EXIT", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
+    if(!gEasy.loadFromRenderedText("EASY", textColor))
+    {
+        cout << "Failed to render text texture!\n";
+        success = false;
+    }
 
-        if(!gEasy.loadFromRenderedText("EASY", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
+    if(!gMedium.loadFromRenderedText("MEDIUM", textColor))
+    {
+        cout << "Failed to render text texture!\n";
+        success = false;
+    }
 
-        if(!gMedium.loadFromRenderedText("MEDIUM", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
+    if(!gHard.loadFromRenderedText("HARD", textColor))
+    {
+        cout << "Failed to render text texture!\n";
+        success = false;
+    }
 
-        if(!gHard.loadFromRenderedText("HARD", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
+    textColor = { 0, 0, 0 };
+    if(!gPlayColor.loadFromRenderedText("PLAY", textColor))
+    {
+        cout << "Failed to render text texture!\n";
+        success = false;
+    }
 
-        textColor = { 0, 0, 0 };
-        if(!gPlayColor.loadFromRenderedText("PLAY", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
+    if(!gExitColor.loadFromRenderedText("EXIT", textColor))
+    {
+        cout << "Failed to render text texture!\n";
+        success = false;
+    }
 
-        if(!gExitColor.loadFromRenderedText("EXIT", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
+    if(!gEasyColor.loadFromRenderedText("EASY", textColor))
+    {
+        cout << "Failed to render text texture!\n";
+        success = false;
+    }
 
-        if(!gEasyColor.loadFromRenderedText("EASY", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
+    if(!gMediumColor.loadFromRenderedText("MEDIUM", textColor))
+    {
+        cout << "Failed to render text texture!\n";
+        success = false;
+    }
 
-        if(!gMediumColor.loadFromRenderedText("MEDIUM", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
-
-        if(!gHardColor.loadFromRenderedText("HARD", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
+    if(!gHardColor.loadFromRenderedText("HARD", textColor))
+    {
+        cout << "Failed to render text texture!\n";
+        success = false;
     }
 
     //Load scene
@@ -492,54 +470,49 @@ void setDifficulty(int Level)
     {
     case EASY:
     {
-        SCREEN_WIDTH = 400;
-        SCREEN_HEIGHT = 400;
-        MINES = 9;
-        SIDE = 10;
+        SCREEN_WIDTH = 294;
+        SCREEN_HEIGHT = 386;
+        MINES = 10;
+        BOARD_WIDTH = 9;
+        BOARD_HEIGHT = 9;
 
         break;
     }
 
     case MEDIUM:
     {
-        SCREEN_WIDTH = 600;
-        SCREEN_HEIGHT = 600;
+        SCREEN_WIDTH = 488;
+        SCREEN_HEIGHT = 580;
         MINES = 40;
-        SIDE = 16;
+        BOARD_WIDTH = 16;
+        BOARD_HEIGHT = 16;
 
         break;
     }
 
     case HARD:
     {
-        SCREEN_WIDTH = 800;
-        SCREEN_HEIGHT = 800;
+        SCREEN_WIDTH = 880;
+        SCREEN_HEIGHT = 582;
         MINES = 99;
-        SIDE = 24;
+        BOARD_WIDTH = 30;
+        BOARD_HEIGHT = 16;
 
         break;
     }
     }
 
-    DISTANCE_BETWEEN = (SCREEN_WIDTH - SIDE * TILE_SIZE) / 2;
+    DISTANCE_W = (SCREEN_WIDTH - BOARD_WIDTH * TILE_SIZE) / 2;
+    DISTANCE_H = (SCREEN_HEIGHT - BOARD_HEIGHT * TILE_SIZE) / 2 + 45;
     countMineLeft = MINES;
-    countTileLeft = SIDE * SIDE;
+    countTileLeft = BOARD_WIDTH * BOARD_HEIGHT;
 
-    realBoard.resize(SIDE, vector<int> (SIDE));
-    curBoard.resize(SIDE, vector<int> (SIDE));
-    gButtons.resize(SIDE, vector<LButton> (SIDE));
+    realBoard.resize(BOARD_HEIGHT, vector<int> (BOARD_WIDTH));
+    curBoard.resize(BOARD_HEIGHT, vector<int> (BOARD_WIDTH));
+    gButtons.resize(BOARD_HEIGHT, vector<LButton> (BOARD_WIDTH));
 
 
     SDL_SetWindowSize(gWindow, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-    //Set buttons position
-    for (int i = 0; i < SIDE; i++)
-    {
-        for (int j = 0; j < SIDE; j++)
-        {
-            gButtons[i][j].setPosition(j * TILE_SIZE + DISTANCE_BETWEEN, i * TILE_SIZE + DISTANCE_BETWEEN + 30);
-        }
-    }
 
     return;
 }
@@ -550,32 +523,56 @@ void renderGame()
     SDL_RenderClear(gRenderer);
     SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
-    //Render background
+    //Render background and set buttons' positions
     switch (DIFFICULTY)
     {
     case EASY:
     {
         easyTable.render(0,0);
+        for (int i = 0; i < BOARD_HEIGHT; i++)
+        {
+            for (int j = 0; j < BOARD_WIDTH; j++)
+            {
+                gButtons[i][j].setPosition(j * TILE_SIZE + DISTANCE_W, i * TILE_SIZE + DISTANCE_H);
+            }
+        }
+
         break;
     }
 
     case MEDIUM:
     {
         mediumTable.render(0,0);
+        for (int i = 0; i < BOARD_HEIGHT; i++)
+        {
+            for (int j = 0; j < BOARD_WIDTH; j++)
+            {
+                gButtons[i][j].setPosition(j * TILE_SIZE + DISTANCE_W, i * TILE_SIZE + DISTANCE_H);
+            }
+        }
+
         break;
     }
 
     case HARD:
     {
         hardTable.render(0,0);
+        for (int i = 0; i < BOARD_HEIGHT; i++)
+        {
+            for (int j = 0; j < BOARD_WIDTH; j++)
+            {
+                gButtons[i][j].setPosition(j * TILE_SIZE + DISTANCE_W, i * TILE_SIZE + DISTANCE_H);
+            }
+        }
+
         break;
     }
     }
 
     //Render buttons
-    for(int i = 0; i < SIDE; i++)
+    for(int i = 0; i < BOARD_HEIGHT; i++)
     {
-        for (int j = 0; j < SIDE; j++)
+        for (int j = 0; j < BOARD_WIDTH; j++)
         {
             gButtons[i][j].render(i, j);
         }
@@ -604,9 +601,9 @@ bool gameHandle()
             return true;
 
         //Handle button events
-        for (int i = 0; i < SIDE; i++)
+        for (int i = 0; i < BOARD_HEIGHT; i++)
         {
-            for (int j = 0; j < SIDE; j++)
+            for (int j = 0; j < BOARD_WIDTH; j++)
             {
                 gButtons[i][j].handleEvent(&e);
             }
@@ -666,9 +663,9 @@ void flagManager()
         //Render lose text
         gTextTextureL.render( ( SCREEN_WIDTH - gTextTextureL.getWidth() ) / 2, 0);
 
-        for(int i = 0; i < SIDE; i++)
+        for(int i = 0; i < BOARD_HEIGHT; i++)
         {
-            for (int j = 0; j < SIDE; j++)
+            for (int j = 0; j < BOARD_WIDTH; j++)
             {
                 curBoard[i][j] = realBoard[i][j];
                 gButtons[i][j].render(i, j);
@@ -695,7 +692,7 @@ void playAgainManager(bool &quitGame)
 
             //Recreate constants
             countMineLeft = MINES;
-            countTileLeft = SIDE * SIDE;
+            countTileLeft = BOARD_HEIGHT * BOARD_WIDTH;
 
             //Recreate flag
             gameOver = false;
@@ -709,8 +706,8 @@ void playAgainManager(bool &quitGame)
 void placeMines()
 {
     //Initialize boards
-    for (int i = 0; i < SIDE; i++)
-        for (int j = 0; j < SIDE; j++)
+    for (int i = 0; i < BOARD_HEIGHT; i++)
+        for (int j = 0; j < BOARD_WIDTH; j++)
         {
             curBoard[i][j] = 10;
             realBoard[i][j] = 0;
@@ -719,9 +716,9 @@ void placeMines()
     //Placing mines
     for (int i = 0; i < MINES;)
     {
-        int random = rand() % (SIDE*SIDE);
-        int x = random / SIDE;
-        int y = random % SIDE;
+        int random = rand() % (BOARD_HEIGHT*BOARD_WIDTH);
+        int x = random / BOARD_HEIGHT;
+        int y = random % BOARD_WIDTH;
 
         if (!isValid(x, y))
             continue;
@@ -738,9 +735,9 @@ void placeMines()
         }
     }
 
-    for (int i = 0; i < SIDE; i++)
+    for (int i = 0; i < BOARD_HEIGHT; i++)
     {
-        for (int j = 0; j < SIDE; j++)
+        for (int j = 0; j < BOARD_WIDTH; j++)
             cout << realBoard[i][j];
         cout << endl;
     }
@@ -760,8 +757,8 @@ void changeMine(int row, int col)
                     realBoard[row+i][col+j]--;
             }
 
-    for (int x = 0; x < SIDE; x++)
-        for (int y = 0; y < SIDE; y++)
+    for (int x = 0; x < BOARD_HEIGHT; x++)
+        for (int y = 0; y < BOARD_WIDTH; y++)
             if (realBoard[x][y] != 9)
             {
                 realBoard[x][y] = 9;
@@ -776,5 +773,5 @@ void changeMine(int row, int col)
 
 bool isValid(int row, int col)
 {
-    return (row >= 0 && col >= 0 && row < SIDE && col < SIDE);
+    return (row >= 0 && col >= 0 && row < BOARD_HEIGHT && col < BOARD_WIDTH);
 }

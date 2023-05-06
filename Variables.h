@@ -16,7 +16,8 @@ extern SDL_Renderer* gRenderer;
 //Screen dimension
 extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;
-extern int DISTANCE_BETWEEN;
+extern int DISTANCE_W;
+extern int DISTANCE_H;
 
 //The sound effects that will be used
 extern Mix_Chunk *click;
@@ -55,7 +56,8 @@ extern LTexture gHardColor;
 
 ///Game variables
 //Table's size
-extern int SIDE;
+extern int BOARD_WIDTH;
+extern int BOARD_HEIGHT;
 
 //Board data
 extern std::vector <std::vector<int> > curBoard;

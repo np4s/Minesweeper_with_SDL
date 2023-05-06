@@ -46,8 +46,8 @@ void LButton::handleEvent(SDL_Event* e)
 		int x, y;
 		SDL_GetMouseState(&x, &y);
 
-        int i = (y - DISTANCE_BETWEEN)/TILE_SIZE;
-        int j = (x - DISTANCE_BETWEEN)/TILE_SIZE;
+        int i = (y - DISTANCE_H)/TILE_SIZE;
+        int j = (x - DISTANCE_W)/TILE_SIZE;
 
 		//Check if mouse is in button
 		bool inside = true;
