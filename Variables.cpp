@@ -26,6 +26,10 @@ TTF_Font *gMenuFont = NULL;
 SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
 LTexture gButtonSpriteSheetTexture;
 
+//Digit texture
+SDL_Rect gDigitSprites[DIGIT_SPRITE_TOTAL];
+LTexture gDigitSpriteSheetTexture;
+
 //In game image
 LTexture gBackgroundTexture;
 LTexture menuTheme;
@@ -33,6 +37,9 @@ LTexture difficultyTheme;
 LTexture easyTable;
 LTexture mediumTable;
 LTexture hardTable;
+LTexture winFace;
+LTexture loseFace;
+LTexture backIcon;
 
 //In game text
 LTexture gTextTextureW;

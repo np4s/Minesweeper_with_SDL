@@ -26,9 +26,13 @@ extern Mix_Chunk *click;
 extern TTF_Font *gFont;
 extern TTF_Font *gMenuFont;
 
-//Mouse button texture
+//Button texture
 extern SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
 extern LTexture gButtonSpriteSheetTexture;
+
+//Digit texture
+extern SDL_Rect gDigitSprites[DIGIT_SPRITE_TOTAL];
+extern LTexture gDigitSpriteSheetTexture;
 
 //In game image
 extern LTexture gBackgroundTexture;
@@ -37,6 +41,9 @@ extern LTexture difficultyTheme;
 extern LTexture easyTable;
 extern LTexture mediumTable;
 extern LTexture hardTable;
+extern LTexture winFace;
+extern LTexture loseFace;
+extern LTexture backIcon;
 
 //In game text
 extern LTexture gTextTextureW;

@@ -81,36 +81,18 @@ bool loadMedia()
     //Loading success flag
     bool success = true;
 
-    //Open the font
-    gFont = TTF_OpenFont("Font/DTM-Sans.ttf", 35);
-    if(gFont == NULL)
-    {
-        cout << "Failed to load DTM-Sans font! SDL_ttf Error: " << TTF_GetError() << endl;
-        success = false;
-    }
-    else
-    {
-        //Render text
-        SDL_Color textColor = { 140, 140, 140 };
-        if(!gPlayAgainTexture.loadFromRenderedText("Press R to play again!", textColor))
-        {
-            cout << "Failed to render text texture!\n";
-            success = false;
-        }
-    }
-
     //Load sound effects
     click = Mix_LoadWAV("Sounds/click.wav");
-    if(click == NULL)
+    if (click == NULL)
     {
         cout << "Failed to load click sound effect! SDL_mixer Error: " << Mix_GetError() << endl;
         success = false;
     }
 
     //Load sprites
-    if(!gButtonSpriteSheetTexture.loadFromFile("Image/Tiles.png"))
+    if (!gButtonSpriteSheetTexture.loadFromFile("Image/Tiles.png"))
     {
-        cout << "Failed to load sprites texture!\n";
+        cout << "Failed to load button sprites texture!\n";
         success = false;
     }
     else
@@ -122,6 +104,24 @@ bool loadMedia()
             gSpriteClips[i].y = 0;
             gSpriteClips[i].w = TILE_SIZE;
             gSpriteClips[i].h = TILE_SIZE;
+        }
+    }
+
+    //Load digits
+    if (!gDigitSpriteSheetTexture.loadFromFile("Image/Digits.png"))
+    {
+        cout << "Failed to load digit sprites texture!\n";
+        success = false;
+    }
+    else
+    {
+        //Set digits
+        for (int i = 0; i < DIGIT_SPRITE_TOTAL; i++)
+        {
+            gDigitSprites[i].x = i * TILE_SIZE;
+            gDigitSprites[i].y = 0;
+            gDigitSprites[i].w = TILE_SIZE;
+            gDigitSprites[i].h = 46;
         }
     }
 
@@ -144,6 +144,24 @@ bool loadMedia()
         success = false;
     }
 
+    //Load icons
+    if (!winFace.loadFromFile("Image/winFace.png"))
+    {
+        cout << "Failed to load win face" << endl;
+        success = false;
+    }
+
+    if (!loseFace.loadFromFile("Image/loseFace.png"))
+    {
+        cout << "Failed to load lose face" << endl;
+        success = false;
+    }
+
+    if (!backIcon.loadFromFile("Image/backIcon.png"))
+    {
+        cout << "Failed to load easy board" << endl;
+        success = false;
+    }
     return success;
 }
 
@@ -152,67 +170,77 @@ bool loadMenuMedia()
     //Loading success flag
     bool success = true;
 
-    //Render text
-    SDL_Color textColor = { 140, 140, 140 };
-    if(!gPlay.loadFromRenderedText("PLAY", textColor))
+    //Open the font
+    gFont = TTF_OpenFont("Font/DTM-Sans.ttf", 35);
+    if(gFont == NULL)
     {
-        cout << "Failed to render text texture!\n";
+        cout << "Failed to load DTM-Sans font! SDL_ttf Error: " << TTF_GetError() << endl;
         success = false;
     }
-
-    if(!gExit.loadFromRenderedText("EXIT", textColor))
+    else
     {
-        cout << "Failed to render text texture!\n";
-        success = false;
-    }
+        //Render text
+        SDL_Color textColor = { 140, 140, 140 };
+        if(!gPlay.loadFromRenderedText("PLAY", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
 
-    if(!gEasy.loadFromRenderedText("EASY", textColor))
-    {
-        cout << "Failed to render text texture!\n";
-        success = false;
-    }
+        if(!gExit.loadFromRenderedText("EXIT", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
 
-    if(!gMedium.loadFromRenderedText("MEDIUM", textColor))
-    {
-        cout << "Failed to render text texture!\n";
-        success = false;
-    }
+        if(!gEasy.loadFromRenderedText("EASY", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
 
-    if(!gHard.loadFromRenderedText("HARD", textColor))
-    {
-        cout << "Failed to render text texture!\n";
-        success = false;
-    }
+        if(!gMedium.loadFromRenderedText("MEDIUM", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
 
-    textColor = { 0, 0, 0 };
-    if(!gPlayColor.loadFromRenderedText("PLAY", textColor))
-    {
-        cout << "Failed to render text texture!\n";
-        success = false;
-    }
+        if(!gHard.loadFromRenderedText("HARD", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
 
-    if(!gExitColor.loadFromRenderedText("EXIT", textColor))
-    {
-        cout << "Failed to render text texture!\n";
-        success = false;
-    }
+        textColor = { 0, 0, 0 };
+        if(!gPlayColor.loadFromRenderedText("PLAY", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
 
-    if(!gEasyColor.loadFromRenderedText("EASY", textColor))
-    {
-        cout << "Failed to render text texture!\n";
-        success = false;
-    }
+        if(!gExitColor.loadFromRenderedText("EXIT", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
 
-    if(!gMediumColor.loadFromRenderedText("MEDIUM", textColor))
-    {
-        cout << "Failed to render text texture!\n";
-        success = false;
-    }
+        if(!gEasyColor.loadFromRenderedText("EASY", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
 
-    if(!gHardColor.loadFromRenderedText("HARD", textColor))
-    {
-        cout << "Failed to render text texture!\n";
-        success = false;
+        if(!gMediumColor.loadFromRenderedText("MEDIUM", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
+
+        if(!gHardColor.loadFromRenderedText("HARD", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
     }
 
     //Load scene
@@ -358,6 +386,7 @@ void createDifficulty()
     gEasy.render(260, 200);
     gMedium.render(240, 275);
     gHard.render(260, 350);
+    backIcon.render(40, 35);
 
     SDL_RenderPresent(gRenderer);
 
@@ -577,6 +606,10 @@ void renderGame()
             gButtons[i][j].render(i, j);
         }
     }
+
+    //Render back button
+    backIcon.render(40, 35);
+
     //Render mine/flag left
     mineManager();
 
@@ -629,20 +662,18 @@ void mineManager()
     //Render text
     if (!gameOver && !isWinning)
     {
-        //Set text color
-        SDL_Color textColor = { 140, 140, 140, 255 };
-
-        //Erase the buffer
-        mineLeft.str ("");
-        mineLeft << "Mine left: " << countMineLeft;
-        if(!gMineLeftTexture.loadFromRenderedText(mineLeft.str().c_str(), textColor))
+        if (countMineLeft < 10)
         {
-            cout << "Unable to render mine left texture!\n";
+            gDigitSpriteSheetTexture.render(SCREEN_WIDTH / 2 - TILE_SIZE, 32, &gDigitSprites[0]);
+            gDigitSpriteSheetTexture.render(SCREEN_WIDTH / 2, 32, &gDigitSprites[max(0, countMineLeft)]);
         }
-
-        //Render text
-        gMineLeftTexture.render((SCREEN_WIDTH - gMineLeftTexture.getWidth()) / 2, 0);
+        else
+        {
+            gDigitSpriteSheetTexture.render(SCREEN_WIDTH / 2 - TILE_SIZE, 32, &gDigitSprites[countMineLeft/10]);
+            gDigitSpriteSheetTexture.render(SCREEN_WIDTH / 2, 32, &gDigitSprites[countMineLeft%10]);
+        }
     }
+    return;
 }
 
 void flagManager()
@@ -650,18 +681,15 @@ void flagManager()
     //Check if win
     if (isWinning && !gameOver)
     {
-        //Render win text
-        gTextTextureW.render((SCREEN_WIDTH - gTextTextureW.getWidth()) / 2, 0);
-
-        //Render playAgain
-        gPlayAgainTexture.render(( SCREEN_WIDTH - gPlayAgainTexture.getWidth() ) / 2, SCREEN_HEIGHT - gPlayAgainTexture.getHeight() );
+        //Render win face
+        winFace.render((SCREEN_WIDTH - winFace.getWidth()) / 2, 32);
     }
 
     //Check if lose
     if (gameOver)
     {
-        //Render lose text
-        gTextTextureL.render( ( SCREEN_WIDTH - gTextTextureL.getWidth() ) / 2, 0);
+        //Render lose face
+        loseFace.render((SCREEN_WIDTH - loseFace.getWidth()) / 2, 32);
 
         for(int i = 0; i < BOARD_HEIGHT; i++)
         {
@@ -671,8 +699,6 @@ void flagManager()
                 gButtons[i][j].render(i, j);
             }
         }
-        //Render play again
-        gPlayAgainTexture.render( ( SCREEN_WIDTH - gPlayAgainTexture.getWidth() ) / 2, SCREEN_HEIGHT - gPlayAgainTexture.getHeight() );
     }
 }
 
@@ -681,24 +707,43 @@ void playAgainManager(bool &quitGame)
     //Event handler
     SDL_Event e;
 
+    bool inFace = false;
+
     //Handle events on queue
     while(SDL_PollEvent(&e) != 0)
     {
-        //User requests play again
-        if(e.key.keysym.sym == SDLK_r)
+        if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEMOTION)
         {
-            //Stop the music
-            Mix_HaltMusic();
+            int x, y;
+            SDL_GetMouseState(&x, &y);
 
-            //Recreate constants
-            countMineLeft = MINES;
-            countTileLeft = BOARD_HEIGHT * BOARD_WIDTH;
+            if (x > (SCREEN_WIDTH - loseFace.getWidth()) / 2 && x < (SCREEN_WIDTH - loseFace.getWidth()) / 2 + loseFace.getWidth() && y > 32 && y < 32 + loseFace.getHeight())
+            {
+                inFace = true;
+            }
+            else
+                inFace = false;
 
-            //Recreate flag
-            gameOver = false;
-            isWinning = false;
-            quitGame = false;
+            if (e.type == SDL_MOUSEBUTTONDOWN)
+            {
+                //User requests play again
+                if (inFace == true)
+                {
+                    //Stop the music
+                    Mix_HaltMusic();
+
+                    //Recreate constants
+                    countMineLeft = MINES;
+                    countTileLeft = BOARD_HEIGHT * BOARD_WIDTH;
+
+                    //Recreate flag
+                    gameOver = false;
+                    isWinning = false;
+                    quitGame = false;
+                }
+            }
         }
+
         else if (e.key.keysym.sym == SDLK_ESCAPE || e.type == SDL_QUIT) quitGame = true;
     }
 }
