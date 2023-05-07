@@ -1,4 +1,5 @@
 #pragma once
+#include<time.h>
 
 ///Window Functions
 //Starts up SDL and creates window
@@ -31,6 +32,9 @@ void setDifficulty(int Level);
 //Handle game events on queue
 bool gameHandle();
 
+//Time
+std::string getTime();
+
 //Check game state
 bool checkWinning();
 
@@ -39,6 +43,9 @@ void mineManager();
 
 //Perform win/lose flag
 void flagManager();
+
+//Render timer
+void timeManager();
 
 //Perform play again flag
 void playAgainManager(bool &quitGame);

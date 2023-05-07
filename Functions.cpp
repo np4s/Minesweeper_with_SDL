@@ -2,13 +2,16 @@
 #include "Constants.h"
 #include "Variables.h"
 #include "Functions.h"
-#include "Functions.h"
+#include "Timer.h"
 
 using namespace std;
 
 //Buttons
 vector< vector<LButton> > gButtons (30, vector<LButton>(30));
 LButton goBack;
+
+//Timer
+LTimer timer;
 
 ///Window Functions
 bool init()
@@ -552,50 +555,35 @@ void renderGame()
     SDL_RenderClear(gRenderer);
     SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
-    //Render background and set buttons' positions
+    //Render background
     switch (DIFFICULTY)
     {
     case EASY:
     {
         easyTable.render(0,0);
-        for (int i = 0; i < BOARD_HEIGHT; i++)
-        {
-            for (int j = 0; j < BOARD_WIDTH; j++)
-            {
-                gButtons[i][j].setPosition(j * TILE_SIZE + DISTANCE_W, i * TILE_SIZE + DISTANCE_H);
-            }
-        }
-
         break;
     }
 
     case MEDIUM:
     {
         mediumTable.render(0,0);
-        for (int i = 0; i < BOARD_HEIGHT; i++)
-        {
-            for (int j = 0; j < BOARD_WIDTH; j++)
-            {
-                gButtons[i][j].setPosition(j * TILE_SIZE + DISTANCE_W, i * TILE_SIZE + DISTANCE_H);
-            }
-        }
-
         break;
     }
 
     case HARD:
     {
         hardTable.render(0,0);
-        for (int i = 0; i < BOARD_HEIGHT; i++)
-        {
-            for (int j = 0; j < BOARD_WIDTH; j++)
-            {
-                gButtons[i][j].setPosition(j * TILE_SIZE + DISTANCE_W, i * TILE_SIZE + DISTANCE_H);
-            }
-        }
-
         break;
     }
+    }
+
+    //Set buttons' positions
+    for (int i = 0; i < BOARD_HEIGHT; i++)
+    {
+        for (int j = 0; j < BOARD_WIDTH; j++)
+        {
+            gButtons[i][j].setPosition(j * TILE_SIZE + DISTANCE_W, i * TILE_SIZE + DISTANCE_H);
+        }
     }
 
     //Render buttons
@@ -615,6 +603,9 @@ void renderGame()
 
     //Perform win/lose flag
     flagManager();
+
+    //Render timer
+    timeManager();
 
     //Update screen
     SDL_RenderPresent(gRenderer);
@@ -668,15 +659,16 @@ void mineManager()
     {
         if (countMineLeft < 10)
         {
-            gDigitSpriteSheetTexture.render(SCREEN_WIDTH / 2 - TILE_SIZE, 32, &gDigitSprites[0]);
-            gDigitSpriteSheetTexture.render(SCREEN_WIDTH / 2, 32, &gDigitSprites[max(0, countMineLeft)]);
+            gDigitSpriteSheetTexture.render(SCREEN_WIDTH / 2 - 40, 32, &gDigitSprites[0]);
+            gDigitSpriteSheetTexture.render(SCREEN_WIDTH / 2 - 40 + TILE_SIZE, 32, &gDigitSprites[max(0, countMineLeft)]);
         }
         else
         {
-            gDigitSpriteSheetTexture.render(SCREEN_WIDTH / 2 - TILE_SIZE, 32, &gDigitSprites[countMineLeft/10]);
-            gDigitSpriteSheetTexture.render(SCREEN_WIDTH / 2, 32, &gDigitSprites[countMineLeft%10]);
+            gDigitSpriteSheetTexture.render(SCREEN_WIDTH / 2 - 40, 32, &gDigitSprites[countMineLeft/10]);
+            gDigitSpriteSheetTexture.render(SCREEN_WIDTH / 2 - 40 + TILE_SIZE, 32, &gDigitSprites[countMineLeft%10]);
         }
     }
+
     return;
 }
 
@@ -685,6 +677,8 @@ void flagManager()
     //Check if win
     if (isWinning && !gameOver)
     {
+        timer.pause();
+
         //Render win face
         winFace.render((SCREEN_WIDTH - winFace.getWidth()) / 2, 32);
     }
@@ -692,6 +686,8 @@ void flagManager()
     //Check if lose
     if (gameOver)
     {
+        timer.pause();
+
         //Render lose face
         loseFace.render((SCREEN_WIDTH - loseFace.getWidth()) / 2, 32);
 
@@ -704,6 +700,21 @@ void flagManager()
             }
         }
     }
+
+    return;
+}
+
+void timeManager()
+{
+    int n = timer.getTicks() / 1000;
+    for (int i = 1; i < 4; i++)
+    {
+        int x = n % 10;
+        n /= 10;
+        gDigitSpriteSheetTexture.render(SCREEN_WIDTH - 24 - TILE_SIZE*i, 32, &gDigitSprites[x]);
+    }
+
+    return;
 }
 
 void playAgainManager(bool &quitGame)
@@ -799,33 +810,52 @@ void placeMines()
             cout << realBoard[i][j];
         cout << endl;
     }
+
+    timer.start();
+    firstMove = true;
     return;
 }
 
 void changeMine(int row, int col)
 {
+    int adjMine = 0;
     realBoard[row][col] = 0;
+
+    //First click always 0 tile
     for (int i = -1; i <= 1; i++)
         for (int j = -1; j <= 1; j++)
-            if ((i || j) && isValid(row+i, col+j))
+            if (isValid(row+i, col+j))
             {
                 if (realBoard[row+i][col+j] == 9)
-                    realBoard[row][col]++;
-                else
-                    realBoard[row+i][col+j]--;
+                {
+                    adjMine++;
+                    realBoard[row+i][col+j] = 0;
+                }
             }
 
+    //Placing mines
+    for (int x = 0; x < BOARD_HEIGHT && adjMine > 0; x++)
+        for (int y = 0; y < BOARD_WIDTH && adjMine > 0; y++)
+            if (realBoard[x][y] != 9 && (abs(row-x) + abs(col-y) > 2))
+            {
+                realBoard[x][y] = 9;
+                adjMine--;
+            }
+
+    //Recalculate adjacent mines
     for (int x = 0; x < BOARD_HEIGHT; x++)
         for (int y = 0; y < BOARD_WIDTH; y++)
             if (realBoard[x][y] != 9)
             {
-                realBoard[x][y] = 9;
+                realBoard[x][y] = 0;
+
                 for (int dx = -1; dx <= 1; dx++)
                     for (int dy = -1; dy <= 1; dy++)
-                        if ((dx || dy) && isValid(x+dx, y+dy) && realBoard[x+dx][y+dy] != 9)
-                            realBoard[x+dx][y+dy]++;
-                break;
+                        if ((dx || dy) && isValid(x+dx, y+dy) && realBoard[x+dx][y+dy] == 9)
+                            realBoard[x][y]++;
+
             }
+
     return;
 }
 

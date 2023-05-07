@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1683456516 source:c:\users\admin\onedrive\desktop\msw-dupe\buttons.cpp
+1683481238 source:c:\users\admin\onedrive\desktop\msw-dupe\buttons.cpp
 	<ctime>
 	"Buttons.h"
 	"Functions.h"
@@ -436,14 +436,15 @@
 
 1683437550 c:\users\admin\onedrive\desktop\msw-dupe\constants.h
 
-1683455896 source:c:\users\admin\onedrive\desktop\msw-dupe\functions.cpp
+1683480862 source:c:\users\admin\onedrive\desktop\msw-dupe\functions.cpp
 	"Texture.h"
 	"Constants.h"
 	"Variables.h"
 	"Functions.h"
-	"Functions.h"
+	"Timer.h"
 
-1683450569 c:\users\admin\onedrive\desktop\msw-dupe\functions.h
+1683459807 c:\users\admin\onedrive\desktop\msw-dupe\functions.h
+	<time.h>
 
 1683456264 source:c:\users\admin\onedrive\desktop\msw-dupe\main.cpp
 	"Texture.h"
@@ -459,4 +460,10 @@
 	"Variables.h"
 	"Buttons.h"
 	"Texture.h"
+
+1683458867 source:c:\users\admin\onedrive\desktop\msw-dupe\timer.cpp
+	"Timer.h"
+
+1683458829 c:\users\admin\onedrive\desktop\msw-dupe\timer.h
+	<SDL.h>
 
