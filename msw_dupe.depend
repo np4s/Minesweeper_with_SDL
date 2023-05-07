@@ -1,14 +1,14 @@
 # depslib dependency file v1.0
-1683392318 source:c:\users\admin\onedrive\desktop\msw-dupe\buttons.cpp
+1683456516 source:c:\users\admin\onedrive\desktop\msw-dupe\buttons.cpp
 	<ctime>
 	"Buttons.h"
 	"Functions.h"
 
-1683346386 c:\users\admin\onedrive\desktop\msw-dupe\buttons.h
+1683455390 c:\users\admin\onedrive\desktop\msw-dupe\buttons.h
 	"Variables.h"
 	"Constants.h"
 
-1683444164 c:\users\admin\onedrive\desktop\msw-dupe\variables.h
+1683454801 c:\users\admin\onedrive\desktop\msw-dupe\variables.h
 	<SDL_mixer.h>
 	<sstream>
 	"Texture.h"
@@ -436,16 +436,16 @@
 
 1683437550 c:\users\admin\onedrive\desktop\msw-dupe\constants.h
 
-1683446662 source:c:\users\admin\onedrive\desktop\msw-dupe\functions.cpp
+1683455896 source:c:\users\admin\onedrive\desktop\msw-dupe\functions.cpp
 	"Texture.h"
 	"Constants.h"
 	"Variables.h"
 	"Functions.h"
 	"Functions.h"
 
-1683352033 c:\users\admin\onedrive\desktop\msw-dupe\functions.h
+1683450569 c:\users\admin\onedrive\desktop\msw-dupe\functions.h
 
-1683369547 source:c:\users\admin\onedrive\desktop\msw-dupe\main.cpp
+1683456264 source:c:\users\admin\onedrive\desktop\msw-dupe\main.cpp
 	"Texture.h"
 	"Constants.h"
 	"Variables.h"
@@ -455,7 +455,7 @@
 	"Texture.h"
 	"Variables.h"
 
-1683444159 source:c:\users\admin\onedrive\desktop\msw-dupe\variables.cpp
+1683457052 source:c:\users\admin\onedrive\desktop\msw-dupe\variables.cpp
 	"Variables.h"
 	"Buttons.h"
 	"Texture.h"

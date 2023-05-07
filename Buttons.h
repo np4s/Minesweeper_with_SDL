@@ -18,6 +18,7 @@ class LButton
 
 		//Handles mouse event
 		void handleEvent(SDL_Event* e);
+		void handleBackEvent(SDL_Event* e);
 
 		//Shows button sprite
 		void render(int i, int j);

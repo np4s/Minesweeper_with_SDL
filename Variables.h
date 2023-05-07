@@ -62,6 +62,9 @@ extern LTexture gMediumColor;
 extern LTexture gHardColor;
 
 ///Game variables
+//Flag
+extern bool backMenu;
+
 //Table's size
 extern int BOARD_WIDTH;
 extern int BOARD_HEIGHT;

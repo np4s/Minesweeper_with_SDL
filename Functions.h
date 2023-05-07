@@ -21,6 +21,9 @@ bool renderMenu();
 void createDifficulty();
 bool renderDifficulty();
 
+///Back button
+bool backHandle();
+
 ///Game Functions
 //Set game variables
 void setDifficulty(int Level);

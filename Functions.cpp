@@ -7,7 +7,8 @@
 using namespace std;
 
 //Buttons
-vector< vector<LButton> > gButtons;
+vector< vector<LButton> > gButtons (30, vector<LButton>(30));
+LButton goBack;
 
 ///Window Functions
 bool init()
@@ -411,6 +412,10 @@ bool renderDifficulty()
                 return false;
             }
 
+            goBack.handleBackEvent(&e);
+            if (backMenu == true)
+                return true;
+
             if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEMOTION)
             {
                 int x, y;
@@ -536,11 +541,6 @@ void setDifficulty(int Level)
     countMineLeft = MINES;
     countTileLeft = BOARD_WIDTH * BOARD_HEIGHT;
 
-    realBoard.resize(BOARD_HEIGHT, vector<int> (BOARD_WIDTH));
-    curBoard.resize(BOARD_HEIGHT, vector<int> (BOARD_WIDTH));
-    gButtons.resize(BOARD_HEIGHT, vector<LButton> (BOARD_WIDTH));
-
-
     SDL_SetWindowSize(gWindow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
     return;
@@ -633,6 +633,9 @@ bool gameHandle()
         if(e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE)
             return true;
 
+        //User requests back to menu
+        goBack.handleBackEvent(&e);
+
         //Handle button events
         for (int i = 0; i < BOARD_HEIGHT; i++)
         {
@@ -641,6 +644,7 @@ bool gameHandle()
                 gButtons[i][j].handleEvent(&e);
             }
         }
+
         isWinning = checkWinning();
     }
 
@@ -744,7 +748,16 @@ void playAgainManager(bool &quitGame)
             }
         }
 
-        else if (e.key.keysym.sym == SDLK_ESCAPE || e.type == SDL_QUIT) quitGame = true;
+        if (e.key.keysym.sym == SDLK_ESCAPE || e.type == SDL_QUIT) quitGame = true;
+
+        goBack.handleBackEvent(&e);
+        if (backMenu == true)
+        {
+            //Recreate flag
+            gameOver = false;
+            isWinning = false;
+            quitGame = false;
+        }
     }
 }
 

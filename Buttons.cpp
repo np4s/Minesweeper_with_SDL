@@ -120,6 +120,32 @@ void LButton::handleEvent(SDL_Event* e)
 	}
 }
 
+void LButton::handleBackEvent(SDL_Event* e)
+{
+    if (e->type == SDL_MOUSEBUTTONDOWN)
+    {
+        int x, y;
+		SDL_GetMouseState(&x, &y);
+		bool inside = false;
+
+		if (x > 40 && x < 40 + backIcon.getWidth() && y > 35 && y < 35 + backIcon.getHeight())
+        {
+            inside = true;
+        }
+        else
+            inside = false;
+
+        if (inside)
+        {
+            SCREEN_HEIGHT = 600;
+            SCREEN_WIDTH = 600;
+            SDL_SetWindowSize(gWindow, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+            backMenu = true;
+        }
+    }
+}
+
 void LButton::render(int i, int j)
 {
 	//Show current button sprite

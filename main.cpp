@@ -27,28 +27,38 @@ int main(int argc, char* args[])
             }
             else
             {
-                if (renderMenu())
+                //While application is running
+                bool quitAll = false;
+                while(!quitAll)
                 {
-                    if (renderDifficulty())
+                    if (renderMenu())
                     {
+                        backMenu = false;
+                        if (renderDifficulty())
+                        {
                             //While application is running
                             bool quit = false;
-                            while(!quit)
+                            while(!backMenu && !quitAll)
                             {
                                 srand(time(NULL));
                                 placeMines();
 
                                 //While game is not over yet
-                                while (!gameOver && !quit && !isWinning)
+                                while (!gameOver && !quitAll && !isWinning && !backMenu)
                                 {
-                                    quit = gameHandle();
+                                    quitAll = gameHandle();
                                     renderGame();
                                 }
 
                                 //Check play again flag
-                                playAgainManager(quit);
+                                playAgainManager(quitAll);
                             }
+                        }
+
+                        else quitAll = true;
                     }
+
+                    else quitAll = true;
                 }
             }
         }

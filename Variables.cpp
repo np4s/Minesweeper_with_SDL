@@ -58,13 +58,16 @@ LTexture gMediumColor;
 LTexture gHardColor;
 
 ///Game variables
+//Flag
+bool backMenu;
+
 //Table's size
 int BOARD_WIDTH;
 int BOARD_HEIGHT;
 
 //Board data
-std::vector <std::vector<int> > curBoard;
-std::vector <std::vector<int> > realBoard;
+std::vector <std::vector<int> > curBoard (30, std::vector<int>(30) );
+std::vector <std::vector<int> > realBoard (30, std::vector<int>(30) );
 
 //Gameplay variables
 int MINES;
