@@ -24,7 +24,6 @@ extern Mix_Chunk *click;
 
 //Globally used font
 extern TTF_Font *gFont;
-extern TTF_Font *gMenuFont;
 
 //Button texture
 extern SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
@@ -46,10 +45,6 @@ extern LTexture loseFace;
 extern LTexture backIcon;
 
 //In game text
-extern LTexture gTextTextureW;
-extern LTexture gTextTextureL;
-extern LTexture gMineLeftTexture;
-extern LTexture gPlayAgainTexture;
 extern LTexture gPlay;
 extern LTexture gExit;
 extern LTexture gPlayColor;
@@ -60,6 +55,8 @@ extern LTexture gHard;
 extern LTexture gEasyColor;
 extern LTexture gMediumColor;
 extern LTexture gHardColor;
+extern LTexture gTextTextureChallenge;
+extern LTexture gTextTextureChallengeColor;
 
 ///Game variables
 //Flag
@@ -76,16 +73,13 @@ extern std::vector <std::vector<int> > realBoard;
 //Gameplay variables
 extern int MINES;
 extern int DIFFICULTY;
+extern int TIME_LIMIT;
 extern int countMineLeft;
 extern int countTileLeft;
 extern bool gameOver;
 extern bool isWinning;
-
-//In memory text stream
-extern stringstream mineLeft;
-
-//Check first move
 extern bool firstMove;
+extern bool challengeMode;
 
 
 

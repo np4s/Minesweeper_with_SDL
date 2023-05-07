@@ -32,9 +32,6 @@ void setDifficulty(int Level);
 //Handle game events on queue
 bool gameHandle();
 
-//Time
-std::string getTime();
-
 //Check game state
 bool checkWinning();
 
@@ -54,7 +51,7 @@ void playAgainManager(bool &quitGame);
 void changeMine(int row, int col);
 
 //Create game board
-void placeMines();
+void initGame();
 
 //Check if cell is within board
 bool isValid(int row, int col);

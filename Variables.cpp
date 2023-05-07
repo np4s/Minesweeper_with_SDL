@@ -20,7 +20,6 @@ Mix_Chunk *click = NULL;
 
 //Globally used font
 TTF_Font *gFont = NULL;
-TTF_Font *gMenuFont = NULL;
 
 //Mouse button texture
 SDL_Rect gSpriteClips[BUTTON_SPRITE_TOTAL];
@@ -42,10 +41,6 @@ LTexture loseFace;
 LTexture backIcon;
 
 //In game text
-LTexture gTextTextureW;
-LTexture gTextTextureL;
-LTexture gMineLeftTexture;
-LTexture gPlayAgainTexture;
 LTexture gPlay;
 LTexture gExit;
 LTexture gPlayColor;
@@ -56,6 +51,8 @@ LTexture gHard;
 LTexture gEasyColor;
 LTexture gMediumColor;
 LTexture gHardColor;
+LTexture gTextTextureChallenge;
+LTexture gTextTextureChallengeColor;
 
 ///Game variables
 //Flag
@@ -72,15 +69,13 @@ std::vector <std::vector<int> > realBoard (30, std::vector<int>(30) );
 //Gameplay variables
 int MINES;
 int DIFFICULTY;
+int TIME_LIMIT;
 int countMineLeft;
 int countTileLeft;
 bool gameOver = false;
 bool isWinning = false;
-
-//In memory text stream
-stringstream mineLeft;
-
-//Check first move
 bool firstMove = true;
+bool challengeMode = false;
+
 
 

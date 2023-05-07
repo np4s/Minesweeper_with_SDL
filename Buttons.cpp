@@ -79,7 +79,8 @@ void LButton::handleEvent(SDL_Event* e)
             if (e->type == SDL_MOUSEBUTTONDOWN)
             {
                 //Play the sound effect
-                Mix_PlayChannel(-1, click, 0);
+                if (curBoard[i][j] == 10 || curBoard[i][j] == 11)
+                    Mix_PlayChannel(-1, click, 0);
 
                 //Set mouse clicked
                 switch (e->button.button)

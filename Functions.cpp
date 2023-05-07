@@ -215,6 +215,12 @@ bool loadMenuMedia()
             success = false;
         }
 
+        if(!gTextTextureChallenge.loadFromRenderedText("CHALLENGE", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
+
         textColor = { 0, 0, 0 };
         if(!gPlayColor.loadFromRenderedText("PLAY", textColor))
         {
@@ -245,6 +251,13 @@ bool loadMenuMedia()
             cout << "Failed to render text texture!\n";
             success = false;
         }
+
+        textColor = { 139, 0, 0 };
+        if(!gTextTextureChallengeColor.loadFromRenderedText("CHALLENGE", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
     }
 
     //Load scene
@@ -267,16 +280,11 @@ void close()
 {
     //Free loaded textures
     gButtonSpriteSheetTexture.free();
-    gMineLeftTexture.free();
     gBackgroundTexture.free();
-    gTextTextureW.free();
-    gTextTextureL.free();
 
     //Free global font
     TTF_CloseFont(gFont);
-    TTF_CloseFont(gMenuFont);
     gFont = NULL;
-    gMenuFont = NULL;
 
     //Free the sound effects
     Mix_FreeChunk(click);
@@ -390,6 +398,7 @@ void createDifficulty()
     gEasy.render(260, 200);
     gMedium.render(240, 275);
     gHard.render(260, 350);
+    gTextTextureChallenge.render(220, 425);
     backIcon.render(40, 35);
 
     SDL_RenderPresent(gRenderer);
@@ -403,6 +412,7 @@ bool renderDifficulty()
     bool inEasy = false;
     bool inMedium = false;
     bool inHard = false;
+    bool inChallenge = false;
     SDL_Event e;
 
     createDifficulty();
@@ -442,6 +452,12 @@ bool renderDifficulty()
                 }
                 else inHard = false;
 
+                if (x > 220 && x < 220 + gTextTextureChallenge.getWidth() && y > 425 && y < 425 + gTextTextureChallenge.getHeight())
+                {
+                    inChallenge = true;
+                }
+                else inChallenge = false;
+
                 if (e.type == SDL_MOUSEMOTION)
                 {
                     if (inEasy == true)
@@ -464,6 +480,17 @@ bool renderDifficulty()
                     }
                     else
                         gHard.render(260, 350);
+
+                    if (challengeMode == false)
+                    {
+                        if (inChallenge == true)
+                        {
+                            gTextTextureChallengeColor.render(220, 425);
+                        }
+                        else
+                            gTextTextureChallenge.render(220, 425);
+                    }
+
                 }
 
                 if (e.type == SDL_MOUSEBUTTONDOWN)
@@ -486,6 +513,15 @@ bool renderDifficulty()
                         {
                             setDifficulty(HARD);
                             quit = true;
+                        }
+
+                        if (inChallenge == true)
+                        {
+                            challengeMode ^= 1;
+                            if (challengeMode == true)
+                                gTextTextureChallengeColor.render(220, 425);
+                            else
+                                gTextTextureChallenge.render(220, 425);
                         }
                     }
                 }
@@ -512,6 +548,7 @@ void setDifficulty(int Level)
         MINES = 10;
         BOARD_WIDTH = 9;
         BOARD_HEIGHT = 9;
+        TIME_LIMIT = 15;
 
         break;
     }
@@ -523,6 +560,7 @@ void setDifficulty(int Level)
         MINES = 40;
         BOARD_WIDTH = 16;
         BOARD_HEIGHT = 16;
+        TIME_LIMIT = 60;
 
         break;
     }
@@ -534,6 +572,7 @@ void setDifficulty(int Level)
         MINES = 99;
         BOARD_WIDTH = 30;
         BOARD_HEIGHT = 16;
+        TIME_LIMIT = 360;
 
         break;
     }
@@ -598,14 +637,14 @@ void renderGame()
     //Render back button
     backIcon.render(40, 35);
 
+    //Render timer
+    timeManager();
+
     //Render mine/flag left
     mineManager();
 
     //Perform win/lose flag
     flagManager();
-
-    //Render timer
-    timeManager();
 
     //Update screen
     SDL_RenderPresent(gRenderer);
@@ -644,12 +683,7 @@ bool gameHandle()
 
 bool checkWinning()
 {
-    bool win = false;
-    if (countTileLeft == MINES)
-    {
-        win = true;
-    }
-    return win;
+    return (countTileLeft == MINES);
 }
 
 void mineManager()
@@ -706,11 +740,18 @@ void flagManager()
 
 void timeManager()
 {
-    int n = timer.getTicks() / 1000;
+    int currentTime = timer.getTicks() / 1000;
+
+    if (challengeMode == true && currentTime == TIME_LIMIT)
+        gameOver = true;
+
+    if (challengeMode == true)
+        currentTime = TIME_LIMIT - currentTime;
+
     for (int i = 1; i < 4; i++)
     {
-        int x = n % 10;
-        n /= 10;
+        int x = currentTime % 10;
+        currentTime /= 10;
         gDigitSpriteSheetTexture.render(SCREEN_WIDTH - 24 - TILE_SIZE*i, 32, &gDigitSprites[x]);
     }
 
@@ -751,6 +792,10 @@ void playAgainManager(bool &quitGame)
                     countMineLeft = MINES;
                     countTileLeft = BOARD_HEIGHT * BOARD_WIDTH;
 
+                    //Recreate board
+                    srand(time(NULL));
+                    initGame();
+
                     //Recreate flag
                     gameOver = false;
                     isWinning = false;
@@ -772,7 +817,7 @@ void playAgainManager(bool &quitGame)
     }
 }
 
-void placeMines()
+void initGame()
 {
     //Initialize boards
     for (int i = 0; i < BOARD_HEIGHT; i++)

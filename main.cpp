@@ -36,13 +36,12 @@ int main(int argc, char* args[])
                         backMenu = false;
                         if (renderDifficulty())
                         {
-                            //While application is running
                             bool quit = false;
+                            srand(time(NULL));
+                            initGame();
+
                             while(!backMenu && !quitAll)
                             {
-                                srand(time(NULL));
-                                placeMines();
-
                                 //While game is not over yet
                                 while (!gameOver && !quitAll && !isWinning && !backMenu)
                                 {
