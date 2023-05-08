@@ -30,8 +30,8 @@ SDL_Rect gDigitSprites[DIGIT_SPRITE_TOTAL];
 LTexture gDigitSpriteSheetTexture;
 
 //In game image
-LTexture gBackgroundTexture;
 LTexture menuTheme;
+LTexture helpTheme;
 LTexture difficultyTheme;
 LTexture easyTable;
 LTexture mediumTable;
@@ -41,16 +41,17 @@ LTexture loseFace;
 LTexture backIcon;
 
 //In game text
-LTexture gPlay;
-LTexture gExit;
-LTexture gPlayColor;
-LTexture gExitColor;
-LTexture gEasy;
-LTexture gMedium;
-LTexture gHard;
-LTexture gEasyColor;
-LTexture gMediumColor;
-LTexture gHardColor;
+LTexture gTextTexturePlay;
+LTexture gTextTextureExit;
+LTexture gTextTextureHelp;
+LTexture gTextTexturePlayColor;
+LTexture gTextTextureExitColor;
+LTexture gTextTextureEasy;
+LTexture gTextTextureMedium;
+LTexture gTextTextureHard;
+LTexture gTextTextureEasyColor;
+LTexture gTextTextureMediumColor;
+LTexture gTextTextureHardColor;
 LTexture gTextTextureChallenge;
 LTexture gTextTextureChallengeColor;
 

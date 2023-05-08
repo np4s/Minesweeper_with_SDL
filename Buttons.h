@@ -18,6 +18,8 @@ class LButton
 
 		//Handles mouse event
 		void handleEvent(SDL_Event* e);
+
+		//Return to the selecting difficulty screen
 		void handleBackEvent(SDL_Event* e);
 
 		//Shows button sprite

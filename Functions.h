@@ -19,6 +19,11 @@ void renderGame();
 ///Menu rendering Functions
 void createMenu();
 bool renderMenu();
+
+///Help Screen
+bool createHelp();
+
+///Selecting Difficulty
 void createDifficulty();
 bool renderDifficulty();
 

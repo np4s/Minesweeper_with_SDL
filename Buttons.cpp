@@ -18,11 +18,8 @@ void LButton::setPosition(int x, int y)
 
 void reveal(int row, int col)
 {
-    if (curBoard[row][col] == 10 || curBoard[row][col] == 11)
+    if (curBoard[row][col] == 10)
     {
-        if (curBoard[row][col] == 11)
-            return;
-
         curBoard[row][col] = realBoard[row][col];
         countTileLeft--;
         if (curBoard[row][col] == 0)
@@ -34,7 +31,6 @@ void reveal(int row, int col)
         }
     }
 
-    return;
 }
 
 void LButton::handleEvent(SDL_Event* e)

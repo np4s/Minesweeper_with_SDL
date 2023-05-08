@@ -50,6 +50,8 @@
 		<Unit filename="Functions.h" />
 		<Unit filename="Texture.cpp" />
 		<Unit filename="Texture.h" />
+		<Unit filename="Timer.cpp" />
+		<Unit filename="Timer.h" />
 		<Unit filename="Variables.cpp" />
 		<Unit filename="Variables.h" />
 		<Unit filename="main.cpp" />

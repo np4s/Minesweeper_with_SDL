@@ -166,6 +166,7 @@ bool loadMedia()
         cout << "Failed to load easy board" << endl;
         success = false;
     }
+
     return success;
 }
 
@@ -185,31 +186,31 @@ bool loadMenuMedia()
     {
         //Render text
         SDL_Color textColor = { 140, 140, 140 };
-        if(!gPlay.loadFromRenderedText("PLAY", textColor))
+        if(!gTextTexturePlay.loadFromRenderedText("PLAY", textColor))
         {
             cout << "Failed to render text texture!\n";
             success = false;
         }
 
-        if(!gExit.loadFromRenderedText("EXIT", textColor))
+        if(!gTextTextureExit.loadFromRenderedText("EXIT", textColor))
         {
             cout << "Failed to render text texture!\n";
             success = false;
         }
 
-        if(!gEasy.loadFromRenderedText("EASY", textColor))
+        if(!gTextTextureEasy.loadFromRenderedText("EASY", textColor))
         {
             cout << "Failed to render text texture!\n";
             success = false;
         }
 
-        if(!gMedium.loadFromRenderedText("MEDIUM", textColor))
+        if(!gTextTextureMedium.loadFromRenderedText("MEDIUM", textColor))
         {
             cout << "Failed to render text texture!\n";
             success = false;
         }
 
-        if(!gHard.loadFromRenderedText("HARD", textColor))
+        if(!gTextTextureHard.loadFromRenderedText("HARD", textColor))
         {
             cout << "Failed to render text texture!\n";
             success = false;
@@ -222,31 +223,37 @@ bool loadMenuMedia()
         }
 
         textColor = { 0, 0, 0 };
-        if(!gPlayColor.loadFromRenderedText("PLAY", textColor))
+        if(!gTextTexturePlayColor.loadFromRenderedText("PLAY", textColor))
         {
             cout << "Failed to render text texture!\n";
             success = false;
         }
 
-        if(!gExitColor.loadFromRenderedText("EXIT", textColor))
+        if(!gTextTextureExitColor.loadFromRenderedText("EXIT", textColor))
         {
             cout << "Failed to render text texture!\n";
             success = false;
         }
 
-        if(!gEasyColor.loadFromRenderedText("EASY", textColor))
+        if(!gTextTextureHelp.loadFromRenderedText("HELP", textColor))
         {
             cout << "Failed to render text texture!\n";
             success = false;
         }
 
-        if(!gMediumColor.loadFromRenderedText("MEDIUM", textColor))
+        if(!gTextTextureEasyColor.loadFromRenderedText("EASY", textColor))
         {
             cout << "Failed to render text texture!\n";
             success = false;
         }
 
-        if(!gHardColor.loadFromRenderedText("HARD", textColor))
+        if(!gTextTextureMediumColor.loadFromRenderedText("MEDIUM", textColor))
+        {
+            cout << "Failed to render text texture!\n";
+            success = false;
+        }
+
+        if(!gTextTextureHardColor.loadFromRenderedText("HARD", textColor))
         {
             cout << "Failed to render text texture!\n";
             success = false;
@@ -273,14 +280,44 @@ bool loadMenuMedia()
         success = false;
     }
 
+    if (!helpTheme.loadFromFile("Image/helpBackground.png"))
+    {
+        cout << "Failed to load background texture!\n";
+        success = false;
+    }
+
     return success;
 }
 
 void close()
 {
-    //Free loaded textures
+    //Free image textures
     gButtonSpriteSheetTexture.free();
-    gBackgroundTexture.free();
+    gDigitSpriteSheetTexture.free();
+    menuTheme.free();
+    helpTheme.free();
+    difficultyTheme.free();
+    easyTable.free();
+    mediumTable.free();
+    hardTable.free();
+    winFace.free();
+    loseFace.free();
+    backIcon.free();
+
+    //Free text textures
+    gTextTexturePlay.free();
+    gTextTextureExit.free();
+    gTextTextureHelp.free();
+    gTextTexturePlayColor.free();
+    gTextTextureExitColor.free();
+    gTextTextureEasy.free();
+    gTextTextureMedium.free();
+    gTextTextureHard.free();
+    gTextTextureEasyColor.free();
+    gTextTextureMediumColor.free();
+    gTextTextureHardColor.free();
+    gTextTextureChallenge.free();
+    gTextTextureChallengeColor.free();
 
     //Free global font
     TTF_CloseFont(gFont);
@@ -308,12 +345,11 @@ void createMenu()
     SDL_RenderClear(gRenderer);
 
     menuTheme.render(0, 0);
-    gPlay.render( ( SCREEN_WIDTH - gPlay.getWidth() ) / 2, 325 );
-    gExit.render( ( SCREEN_WIDTH - gExit.getWidth() ) / 2, 400 );
+    gTextTexturePlay.render( ( SCREEN_WIDTH - gTextTexturePlay.getWidth() ) / 2, 325 );
+    gTextTextureExit.render( ( SCREEN_WIDTH - gTextTextureExit.getWidth() ) / 2, 400 );
+    gTextTextureHelp.render(500, 550);
 
     SDL_RenderPresent(gRenderer);
-
-    return;
 }
 
 bool renderMenu()
@@ -321,6 +357,7 @@ bool renderMenu()
     //Returns Play(true) or Exit(false)
     bool inPlay = false;
     bool inExit = false;
+    bool inHelp = false;
     bool quit = false;
     SDL_Event e;
 
@@ -339,33 +376,39 @@ bool renderMenu()
                 int x, y;
                 SDL_GetMouseState(&x, &y);
 
-                if (x > ( SCREEN_WIDTH - gPlay.getWidth() ) / 2 && x < ( SCREEN_WIDTH - gPlay.getWidth() ) / 2 + gPlay.getWidth() && y > 325 && y < 325 + gPlay.getHeight())
+                if (x > ( SCREEN_WIDTH - gTextTexturePlay.getWidth() ) / 2 && x < ( SCREEN_WIDTH - gTextTexturePlay.getWidth() ) / 2 + gTextTexturePlay.getWidth() && y > 325 && y < 325 + gTextTexturePlay.getHeight())
                 {
                     inPlay = true;
                 }
                 else inPlay = false;
 
-                if (x > ( SCREEN_WIDTH - gExit.getWidth() ) / 2 && x < ( SCREEN_WIDTH - gExit.getWidth() ) / 2 + gExit.getWidth() && y > 400 && y < 400 + gExit.getHeight())
+                if (x > ( SCREEN_WIDTH - gTextTextureExit.getWidth() ) / 2 && x < ( SCREEN_WIDTH - gTextTextureExit.getWidth() ) / 2 + gTextTextureExit.getWidth() && y > 400 && y < 400 + gTextTextureExit.getHeight())
                 {
                     inExit = true;
                 }
                 else inExit = false;
 
+                if (x > 500 && x < 500 + gTextTextureHelp.getWidth() && y > 550 && y < 550 + gTextTextureHelp.getHeight())
+                {
+                    inHelp = true;
+                }
+                else inHelp = false;
+
                 if (e.type == SDL_MOUSEMOTION)
                 {
                     if (inPlay == true)
                     {
-                        gPlayColor.render( ( SCREEN_WIDTH - gPlay.getWidth() ) / 2, 325 );
+                        gTextTexturePlayColor.render( ( SCREEN_WIDTH - gTextTexturePlay.getWidth() ) / 2, 325 );
                     }
                     else
-                        gPlay.render( ( SCREEN_WIDTH - gPlay.getWidth() ) / 2, 325 );
+                        gTextTexturePlay.render( ( SCREEN_WIDTH - gTextTexturePlay.getWidth() ) / 2, 325 );
 
                     if (inExit == true)
                     {
-                        gExitColor.render( ( SCREEN_WIDTH - gExit.getWidth() ) / 2, 400 );
+                        gTextTextureExitColor.render( ( SCREEN_WIDTH - gTextTextureExit.getWidth() ) / 2, 400 );
                     }
                     else
-                        gExit.render( ( SCREEN_WIDTH - gExit.getWidth() ) / 2, 400 );
+                        gTextTextureExit.render( ( SCREEN_WIDTH - gTextTextureExit.getWidth() ) / 2, 400 );
                 }
 
                 if (e.type == SDL_MOUSEBUTTONDOWN)
@@ -381,6 +424,10 @@ bool renderMenu()
                         {
                             return false;
                         }
+
+                        if (inHelp == true)
+                            if (!createHelp())
+                                return false;
                     }
                 }
             }
@@ -390,24 +437,54 @@ bool renderMenu()
     }
 }
 
+///Help screen
+bool createHelp()
+{
+    SDL_RenderClear(gRenderer);
+
+    helpTheme.render(0, 0);
+    backIcon.render(40, 35);
+
+    SDL_RenderPresent(gRenderer);
+
+    SDL_Event e;
+
+    while (!backMenu)
+    {
+        while(SDL_PollEvent(&e) != 0)
+        {
+            if (e.type == SDL_QUIT || e.key.keysym.sym == SDLK_ESCAPE)
+            {
+                return false;
+            }
+            goBack.handleBackEvent(&e);
+        }
+    }
+
+    createMenu();
+    backMenu = false;
+    return true;
+}
+
+///Selecting Difficulty
 void createDifficulty()
 {
     SDL_RenderClear(gRenderer);
 
     difficultyTheme.render(0, 0);
-    gEasy.render(260, 200);
-    gMedium.render(240, 275);
-    gHard.render(260, 350);
+    gTextTextureEasy.render(260, 200);
+    gTextTextureMedium.render(240, 275);
+    gTextTextureHard.render(260, 350);
     gTextTextureChallenge.render(220, 425);
     backIcon.render(40, 35);
 
     SDL_RenderPresent(gRenderer);
-
-    return;
 }
 
 bool renderDifficulty()
 {
+    challengeMode = false;
+
     bool quit = false;
     bool inEasy = false;
     bool inMedium = false;
@@ -427,26 +504,26 @@ bool renderDifficulty()
 
             goBack.handleBackEvent(&e);
             if (backMenu == true)
-                return true;
+                    return true;
 
             if (e.type == SDL_MOUSEBUTTONDOWN || e.type == SDL_MOUSEMOTION)
             {
                 int x, y;
                 SDL_GetMouseState(&x, &y);
 
-                if (x > 260 && x < 260 + gEasy.getWidth() && y > 200 && y < 200 + gEasy.getHeight())
+                if (x > 260 && x < 260 + gTextTextureEasy.getWidth() && y > 200 && y < 200 + gTextTextureEasy.getHeight())
                 {
                     inEasy = true;
                 }
                 else inEasy = false;
 
-                if (x > 240 && x < 240 + gMedium.getWidth() && y > 275 && y < 275 + gMedium.getHeight())
+                if (x > 240 && x < 240 + gTextTextureMedium.getWidth() && y > 275 && y < 275 + gTextTextureMedium.getHeight())
                 {
                     inMedium = true;
                 }
                 else inMedium = false;
 
-                if (x > 260 && x < 260 + gHard.getWidth() && y > 350 && y < 350 + gHard.getHeight())
+                if (x > 260 && x < 260 + gTextTextureHard.getWidth() && y > 350 && y < 350 + gTextTextureHard.getHeight())
                 {
                     inHard = true;
                 }
@@ -462,24 +539,24 @@ bool renderDifficulty()
                 {
                     if (inEasy == true)
                     {
-                        gEasyColor.render(260, 200);
+                        gTextTextureEasyColor.render(260, 200);
                     }
                     else
-                        gEasy.render(260, 200);
+                        gTextTextureEasy.render(260, 200);
 
                     if (inMedium == true)
                     {
-                        gMediumColor.render(240, 275);
+                        gTextTextureMediumColor.render(240, 275);
                     }
                     else
-                        gMedium.render(240, 275);
+                        gTextTextureMedium.render(240, 275);
 
                     if (inHard == true)
                     {
-                        gHardColor.render(260, 350);
+                        gTextTextureHardColor.render(260, 350);
                     }
                     else
-                        gHard.render(260, 350);
+                        gTextTextureHard.render(260, 350);
 
                     if (challengeMode == false)
                     {
@@ -584,8 +661,6 @@ void setDifficulty(int Level)
     countTileLeft = BOARD_WIDTH * BOARD_HEIGHT;
 
     SDL_SetWindowSize(gWindow, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-    return;
 }
 
 void renderGame()
@@ -648,8 +723,6 @@ void renderGame()
 
     //Update screen
     SDL_RenderPresent(gRenderer);
-
-    return;
 }
 
 bool gameHandle()
@@ -703,7 +776,6 @@ void mineManager()
         }
     }
 
-    return;
 }
 
 void flagManager()
@@ -735,7 +807,6 @@ void flagManager()
         }
     }
 
-    return;
 }
 
 void timeManager()
@@ -755,7 +826,6 @@ void timeManager()
         gDigitSpriteSheetTexture.render(SCREEN_WIDTH - 24 - TILE_SIZE*i, 32, &gDigitSprites[x]);
     }
 
-    return;
 }
 
 void playAgainManager(bool &quitGame)
@@ -849,16 +919,16 @@ void initGame()
         }
     }
 
-    for (int i = 0; i < BOARD_HEIGHT; i++)
-    {
-        for (int j = 0; j < BOARD_WIDTH; j++)
-            cout << realBoard[i][j];
-        cout << endl;
-    }
+//    //Cheater
+//    for (int i = 0; i < BOARD_HEIGHT; i++)
+//    {
+//        for (int j = 0; j < BOARD_WIDTH; j++)
+//            cout << realBoard[i][j];
+//        cout << endl;
+//    }
 
     timer.start();
     firstMove = true;
-    return;
 }
 
 void changeMine(int row, int col)
@@ -900,8 +970,6 @@ void changeMine(int row, int col)
                             realBoard[x][y]++;
 
             }
-
-    return;
 }
 
 bool isValid(int row, int col)

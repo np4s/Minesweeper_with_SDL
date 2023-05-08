@@ -31,19 +31,18 @@ int main(int argc, char* args[])
                 bool quitAll = false;
                 while(!quitAll)
                 {
+                    backMenu = false;
                     if (renderMenu())
                     {
-                        backMenu = false;
                         if (renderDifficulty())
                         {
-                            bool quit = false;
                             srand(time(NULL));
                             initGame();
 
                             while(!backMenu && !quitAll)
                             {
                                 //While game is not over yet
-                                while (!gameOver && !quitAll && !isWinning && !backMenu)
+                                while (!gameOver && !isWinning && !backMenu && !quitAll)
                                 {
                                     quitAll = gameHandle();
                                     renderGame();
